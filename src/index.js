@@ -1,6 +1,8 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 
+const { createChannel } = require('./utils/messageQueue');
+
 const jobs = require('./utils/job');
 
 const { PORT } = require('./config/serverconfig');
@@ -8,18 +10,20 @@ const { PORT } = require('./config/serverconfig');
 const {sendBasicEmail} = require('./services/email-service');
 const TicketController = require('./controllers/ticker-controller');
 
-const setupAndStartServer = () => {
+const setupAndStartServer = async () => {
     const app = express();
 
     app.use(bodyParser.json());
     app.use(bodyParser.urlencoded({extended: true}));
+
+    //const channel = await createChannel()
 
     app.post('/api/v1/tickets', TicketController.create);
 
     app.listen(PORT, async () => {
         console.log(`Server Started on Port: ${PORT}`);
 
-        jobs();
+        //jobs();
         // sendBasicEmail(
         //     'support@admin.com',    //from
         //     'vineethd333@gmail.com',    //to
